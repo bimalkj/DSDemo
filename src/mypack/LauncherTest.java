@@ -12,14 +12,19 @@ import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestFactory;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 
 class LauncherTest {
 		//LinkNode n;
+	public static int[][] data() {
+		return new int[][] {{2,3,8},{9,7,25},{7,4,18},{8,5,68}};
+	}
 	
 	@TestFactory
 	Stream<DynamicTest> testComputeMulti() {
-		int[][] x=new int[][] {{2,3,8},{9,7,25},{7,4,18},{8,5,68}};
-		return Arrays.stream(x).map(el -> {
+		//int[][] x=new int[][] {{2,3,8},{9,7,25},{7,4,18},{8,5,68}};
+		return Arrays.stream(data()).map(el -> {
 			int a=el[0];
 			int b=el[1];
 			int result=el[2];
@@ -27,6 +32,12 @@ class LauncherTest {
 				assertEquals(result,Launcher.compute(a,b));
 			}) ;
 		});	
+	}
+	
+	@ParameterizedTest
+	@MethodSource(value="data")
+	void testComputeParam(int[] data) {
+		assertEquals(data[2],Launcher.compute(data[0],data[1]));
 	}
 	
 	@BeforeEach
